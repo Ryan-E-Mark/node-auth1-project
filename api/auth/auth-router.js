@@ -48,21 +48,5 @@ router.get('/logout', async (req, res, next) => {
     })
   }
 })
-/**
-  3 [GET] /api/auth/logout
 
-  response for logged-in users:
-  status 200
-  {
-    "message": "logged out"
-  }
-
-  response for not-logged-in users:
-  status 200
-  {
-    "message": "no session"
-  }
- */
-
- 
 module.exports = router
