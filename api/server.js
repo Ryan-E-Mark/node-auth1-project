@@ -1,6 +1,8 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const userRouter = require('./users/users-router')
+const authRouter = require('./auth/auth-router')
 
 const session = require('express-session')
 const Store = require('connect-session-knex')(session)
@@ -25,6 +27,7 @@ server.use(cors());
 
 server.use(session({
   name: 'chocolatechip',
+  secret: 'big ol secret',
   cookie: {
     maxAge: 1000 * 60,
     secure: false,
@@ -40,6 +43,9 @@ server.use(session({
     clearInterval: 1000 * 60 * 60,
   })
 }))
+
+server.use('/api/users', userRouter)
+server.use('/api/auth', authRouter)
 
 server.get("/", (req, res) => {
   res.json({ api: "up" });
