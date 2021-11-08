@@ -20,30 +20,20 @@ router.post('/register', checkPasswordLength, checkUsernameFree, async (req, res
   }
 })
 
-/**
-  1 [POST] /api/auth/register { "username": "sue", "password": "1234" }
-
-  response:
-  status 200
-  {
-    "user_id": 2,
-    "username": "sue"
+router.post('/login', checkUsernameExists, async (req, res, next) => {
+  const { username, password } = req.body
+  try {
+    const user = await Users.findBy({username})
+    const validPassword = bcrypt.compareSync(password, user.password)
+    if (!validPassword) {
+     return next({ status: 401, message: "Invalid credentials"})
+    }
+    req.session.user = user
+    res.status(200).json({ message: `Welcome ${user.username}!`})
+  } catch (err) {
+    next(err)
   }
-
-  response on username taken:
-  status 422
-  {
-    "message": "Username taken"
-  }
-
-  response on password three chars or less:
-  status 422
-  {
-    "message": "Password must be longer than 3 chars"
-  }
- */
-
-
+})
 /**
   2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
 
