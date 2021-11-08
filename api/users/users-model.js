@@ -1,29 +1,38 @@
+const db = require('../../data/db-config')
 /**
   resolves to an ARRAY with all users, each user having { user_id, username }
  */
-function find() {
-
+async function find() {
+  return result = await db('users')
 }
 
 /**
   resolves to an ARRAY with all users that match the filter condition
  */
-function findBy(filter) {
-
+async function findBy(filter) {
+  const result = await db('users').where(filter)
+  return result
 }
 
 /**
   resolves to the user { user_id, username } with the given user_id
  */
-function findById(user_id) {
-
+async function findById(user_id) {
+  const result = await db('users').where('user_id', user_id).first()
+  return result 
 }
 
 /**
   resolves to the newly inserted user { user_id, username }
  */
-function add(user) {
-
+async function add(user) {
+  const result = await db('users').insert(user)
+  return result
 }
 
-// Don't forget to add these to the `exports` object so they can be required in other modules
+module.exports = {
+  find,
+  findBy,
+  findById,
+  add
+}
