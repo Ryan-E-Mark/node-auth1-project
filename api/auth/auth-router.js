@@ -34,23 +34,20 @@ router.post('/login', checkUsernameExists, async (req, res, next) => {
     next(err)
   }
 })
-/**
-  2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
 
-  response:
-  status 200
-  {
-    "message": "Welcome sue!"
+router.get('/logout', async (req, res, next) => {
+  if(!req.session.user) {
+    next({ status: 200, message: "no session"})
+  } else {
+    req.session.destroy((err) => {
+      if (err) {
+        next({ status: 500, message: "Something went wrong trying to logout"})
+      } else {
+        res.status(200).json({ message: "logged out"})
+      }
+    })
   }
-
-  response on invalid credentials:
-  status 401
-  {
-    "message": "Invalid credentials"
-  }
- */
-
-
+})
 /**
   3 [GET] /api/auth/logout
 
